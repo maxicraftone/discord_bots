@@ -22,5 +22,11 @@ class Translator_Client(discord.Client):
     async def asciify(self, *args):
         print(args)
 
-client = Translator_Client()
-client.run('[TOKEN HERE]')
+
+if __name__ == '__main__':
+    token = ''
+    with open('token', 'r') as token_file:
+        token = token_file.read()[:-1]
+
+    client = Translator_Client()
+    client.run(token)
