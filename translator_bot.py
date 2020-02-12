@@ -23,4 +23,4 @@ class Translator_Client(discord.Client):
         print(args)
 
 client = Translator_Client()
-client.run('Njc3MTA3NjA1ODQzMjE0MzM2.XkPbsQ.9zQHm4B8kJdtJf9Ga74JHknQ__8')
+client.run('[TOKEN HERE]')
