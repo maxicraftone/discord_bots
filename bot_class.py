@@ -1,4 +1,6 @@
+import os, sys
 import discord
+
 
 class Bot(discord.Client):
     def __init__(self, name, prefix=''):
@@ -25,9 +27,16 @@ class Bot(discord.Client):
 
     def get_token(self, token_file='token'):
         token = ''
-        with open('token', 'r') as token_file:
+        with open(self.path('token'), 'r') as token_file:
             tokens = token_file.read().split('\n')
             for t in tokens:
                 if self.name in t:
                     token = t.split(' ')[1]
         return token
+
+    @staticmethod
+    def path(filename):
+        path = os.path.dirname(sys.argv[0])
+        if not path:
+            path = '.'
+        return path + '/' + filename
