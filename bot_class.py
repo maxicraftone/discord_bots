@@ -1,7 +1,6 @@
 import os, sys
 import discord
 
-
 class Bot(discord.Client):
     def __init__(self, name, prefix=''):
         self.prefix = prefix
@@ -13,6 +12,10 @@ class Bot(discord.Client):
         print(self.user.name)
         print(self.user.id)
         print('------')
+        print('Servers:')
+        for g in self.guilds:
+            print(g)
+        print('------')
 
     async def on_message(self, msg):
         if prefix != '':
@@ -21,7 +24,7 @@ class Bot(discord.Client):
                     command = msg.content[1:].split(' ')[0]
                     args = msg.content[1:].split(' ')[1:]
                     self.on_command(command, args, msg)
-
+    
     async def on_command(self, command, args, msg):
         pass
 
