@@ -18,20 +18,20 @@ class Bot(discord.Client):
         print('------')
 
     async def on_message(self, msg):
-        if prefix != '':
+        if self.prefix != '':
             if msg.author != self.user:
                 if msg.content.startswith(self.prefix):
                     command = msg.content[1:].split(' ')[0]
                     args = msg.content[1:].split(' ')[1:]
-                    self.on_command(command, args, msg)
-    
+                    await self.on_command(command, args, msg)
+
     async def on_command(self, command, args, msg):
         pass
 
     def get_token(self, token_file='token'):
         token = ''
-        with open(self.path('token'), 'r') as token_file:
-            tokens = token_file.read().split('\n')
+        with open(self.path(token_file), 'r') as file:
+            tokens = file.read().split('\n')
             for t in tokens:
                 if self.name in t:
                     token = t.split(' ')[1]
