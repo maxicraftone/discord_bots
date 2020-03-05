@@ -1,7 +1,5 @@
 import os, sys
 import discord
-from functools import wraps
-from inspect import signature
 
 class Bot(discord.Client):
 
