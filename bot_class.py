@@ -29,9 +29,12 @@ class Bot(discord.Client):
         print('------')
 
         # Printing servers to which the bot was added
-        print('Servers:')
-        for g in self.guilds:
-            print(g)
+        if len(self.guilds) > 0:
+            print('Servers:')
+            for g in self.guilds:
+                print('> ', g)
+        else:
+            print('Bot was not added to any servers yet.')
         print('------')
 
         self.get_command_functions()
