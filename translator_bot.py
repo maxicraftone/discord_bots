@@ -2,11 +2,12 @@
 from bot_class import Bot
 
 class TranslatorBot(Bot):
-    async def on_command(self, command, args, msg):
-        if command == 'asciify':
-            await self.asciify(args)
+    @Bot.command
+    async def asciify(self, command, args, msg):
+        await msg.channel.send('Not ready yet')
 
-    async def asciify(self, args):
+    @Bot.command
+    async def some_func(self):
         pass
 
 if __name__ == '__main__':
