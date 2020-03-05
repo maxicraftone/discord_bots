@@ -9,45 +9,49 @@ class Bot(discord.Client):
     commands = {}
 
     def __init__(self, name, prefix=''):
+        # Prefix used for commands
         self.prefix = prefix
+        # Name of the bot (relevant in the token file)
         self.name = name
         super().__init__()
 
     async def on_ready(self) -> None:
         """
         Discord event triggered on login
+        Prints some information and loads commands
 
         :return: None
         """
+        # Printing username and id of the bot
         print('Logged in as')
         print(self.user.name)
         print(self.user.id)
         print('------')
+
+        # Printing servers to which the bot was added
         print('Servers:')
         for g in self.guilds:
             print(g)
         print('------')
 
-        object_methods = [method_name for method_name in dir(self) if callable(getattr(self, method_name))]
-        for method in object_methods:
-            try:
-                if Bot.command in getattr(self, method)._decorators:
-                    self.commands[method] = getattr(self, method)
-            except AttributeError:
-                continue
+        self.get_command_functions()
 
     async def on_message(self, msg: discord.Message) -> None:
         """
         Discord event triggered upon receipt of a message
+        Can be overridden if necessary
 
         :param msg: Discord message received by the event
         :return: None
         """
+        # If the prefix is set
         if self.prefix != '':
+            # Check if the received message was not sent by the bot itself
             if msg.author != self.user:
                 if msg.content.startswith(self.prefix):
                     command = msg.content[1:].split(' ')[0]
                     args = msg.content[1:].split(' ')[1:]
+                    # Send command with arguments to on_command function
                     await self.on_command(command, args, msg)
 
     def command(func: 'function') -> 'function':
@@ -57,13 +61,10 @@ class Bot(discord.Client):
         set to (Bot.function,)
 
         :param func: Function for decorator input
-        :return: Wrapped function
+        :return: Function with added _decorators attribute
         """
-        def wrapped(self, command, args, msg):
-            return func(self, command, args, msg)
-
-        wrapped._decorators = (Bot.command,)
-        return wrapped
+        func._decorators = (Bot.command,)
+        return func
 
     async def on_command(self, command: str, args: list, msg: discord.Message) -> None:
         """
@@ -74,7 +75,9 @@ class Bot(discord.Client):
         :param msg: The discord message sent by the user
         :return: None
         """
+        # Check if command exists
         if self.commands[command]:
+            # Call command function
             await self.commands[command](command, args, msg)
 
     def get_token(self, token_file: str = 'token') -> str:
@@ -89,10 +92,30 @@ class Bot(discord.Client):
         token = ''
         with open(self.path(token_file), 'r') as file:
             tokens = file.read().split('\n')
+            # Loop over all tokens in the file
             for t in tokens:
+                # Check if name of token matches name of bot
                 if self.name in t:
                     token = t.split(' ')[1]
         return token
+
+    def get_command_functions(self) -> None:
+        """
+        Get the functions with an @Bot.command decorator and add them to the
+        commands dict
+
+        :return: None
+        """
+        # List of all methods of a bot object
+        methods = [method for method in dir(self) if callable(getattr(self, method))]
+        for method in methods:
+            try:
+                # Test if method has attribute _decorators
+                if Bot.command in getattr(self, method)._decorators:
+                    # Add command to commands list
+                    self.commands[method] = getattr(self, method)
+            except AttributeError:
+                continue
 
     @staticmethod
     def path(filename: str) -> str:
