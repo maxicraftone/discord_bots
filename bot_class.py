@@ -40,7 +40,10 @@ class Bot(discord.Client):
     async def on_message(self, msg: discord.Message) -> None:
         """
         Discord event triggered upon receipt of a message
+
         Can be overridden if necessary
+        If @Bot.command functions are being used,
+        use "await super().on_message(msg)" in the overriding function
 
         :param msg: Discord message received by the event
         :return: None
