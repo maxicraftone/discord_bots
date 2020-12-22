@@ -37,6 +37,13 @@ class Bot(discord.Client):
 
         self.get_command_functions()
 
+        # Printing commands
+        if len(self.commands) > 0:
+            print('Commands')
+            for c in self.commands:
+                print('> ', c)
+            print('------')
+
     async def on_message(self, msg: discord.Message) -> None:
         """
         Discord event triggered upon receipt of a message
@@ -79,10 +86,13 @@ class Bot(discord.Client):
         :param msg: The discord message sent by the user
         :return: None
         """
-        # Check if command exists
-        if self.commands[command]:
-            # Call command function
-            await self.commands[command](command, args, msg)
+        try:
+            # Check if command exists
+            if self.commands[command]:
+                # Call command function
+                await self.commands[command](command, args, msg)
+        except KeyError:
+            await msg.channel.send('This command does not exist.')
 
     def get_token(self, token_file: str = 'token') -> str:
         """
