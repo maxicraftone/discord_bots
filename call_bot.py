@@ -21,7 +21,7 @@ class CallBot(Bot):
                     if len(content) > 0:
                         calls = [i for i in content.split('\n') if i != '']
                         for call in calls:
-                            call = call.split(' ')
+                            call = [call.split(' ')[0], ' '.join(call.split(' ')[1:])]
                             if call[0] == 'textall':
                                 for user in ['max']:
                                     await self.send_text(user, call[1])
