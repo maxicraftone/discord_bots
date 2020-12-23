@@ -2,5 +2,4 @@ token
 __pycache__/
 ssh_bot.py
 lyrics.txt
-call_bot.py
 calls.txt
